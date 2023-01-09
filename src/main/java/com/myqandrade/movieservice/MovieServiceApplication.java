@@ -8,14 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-@RestController
-@RequestMapping("/")
 public class MovieServiceApplication {
-
-	@GetMapping
-	public String hello(){
-		return "HELLO WORLD!";
-	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(MovieServiceApplication.class, args);
