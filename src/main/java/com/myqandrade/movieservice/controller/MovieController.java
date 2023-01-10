@@ -10,24 +10,29 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/movie-service")
+@RequestMapping("/movies")
 public class MovieController {
 
     @Autowired
     private MovieService movieService;
 
-    @GetMapping("/movies")
+    @GetMapping
     public ResponseEntity<List<MovieModel>> findALl(){
         return movieService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieModel> findById(@PathVariable(name = "id") UUID id){
+    public ResponseEntity<MovieModel> findById(@PathVariable(value = "id") UUID id){
         return movieService.findById(id);
     }
 
     @PostMapping
-    public void save(@RequestBody MovieModel movie){
-        movieService.save(movie);
+    public ResponseEntity<MovieModel> save(@RequestBody MovieModel movie){
+       return movieService.save(movie);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MovieModel> delete(@PathVariable(value = "id") UUID id){
+        return movieService.delete(id);
     }
 }

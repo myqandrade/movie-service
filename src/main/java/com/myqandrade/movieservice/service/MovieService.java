@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,11 +23,29 @@ public class MovieService {
     }
 
     public ResponseEntity<MovieModel> findById(UUID id){
-        var movie = movieRepository.findById(id).get();
-        return ResponseEntity.ok().body(movie);
+        Optional<MovieModel> movie = movieRepository.findById(id);
+        if(movie.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(movie.get(), HttpStatus.OK);
     }
 
-    public void save(MovieModel movie){
-        movieRepository.save(movie);
+    public ResponseEntity<MovieModel> save(MovieModel movie){
+        List<MovieModel> movies = movieRepository.findAll();
+        for(MovieModel x : movies){
+            if(movie.getTitle().equals(x.getTitle())){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        return new ResponseEntity<>(movieRepository.save(movie), HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<MovieModel> delete(UUID id){
+        Optional<MovieModel> movie = movieRepository.findById(id);
+        if(movie.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        movieRepository.delete(movie.get());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
