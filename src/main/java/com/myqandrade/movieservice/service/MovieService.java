@@ -3,6 +3,7 @@ package com.myqandrade.movieservice.service;
 import com.myqandrade.movieservice.models.MovieModel;
 import com.myqandrade.movieservice.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,9 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
-    public List<MovieModel> findAll(){
-        return movieRepository.findAll();
+    public ResponseEntity<List<MovieModel>> findAll(){
+        return new ResponseEntity<List<MovieModel>>(
+                movieRepository.findAll(), HttpStatus.OK);
     }
 
     public ResponseEntity<MovieModel> findById(UUID id){

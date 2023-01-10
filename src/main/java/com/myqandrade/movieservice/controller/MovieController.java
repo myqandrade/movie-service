@@ -16,8 +16,8 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @GetMapping
-    public List<MovieModel> findALl(){
+    @GetMapping("/movies")
+    public ResponseEntity<List<MovieModel>> findALl(){
         return movieService.findAll();
     }
 
