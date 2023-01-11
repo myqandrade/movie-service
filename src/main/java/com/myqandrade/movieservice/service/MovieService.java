@@ -48,4 +48,13 @@ public class MovieService {
         movieRepository.delete(movie.get());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    public ResponseEntity<MovieModel> update(UUID id, MovieModel movieModel){
+        Optional<MovieModel> movie = movieRepository.findById(id);
+        if (movie.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        movieModel.setId(movie.get().getId());
+        return new ResponseEntity<>(movieRepository.save(movieModel), HttpStatus.OK);
+    }
 }

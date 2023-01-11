@@ -35,4 +35,10 @@ public class MovieController {
     public ResponseEntity<MovieModel> delete(@PathVariable(value = "id") UUID id){
         return movieService.delete(id);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MovieModel> update(@PathVariable(value = "id") UUID id,
+                                             @RequestBody MovieModel movieModel){
+        return movieService.update(id, movieModel);
+    }
 }
