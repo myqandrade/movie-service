@@ -49,13 +49,13 @@ public class MovieService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity update(UUID id, MovieModel movieModel){
+    public MovieModel update(UUID id, MovieModel movieModel){
         return movieRepository
                 .findById(id)
                 .map( movie -> {
                     movieModel.setId(movie.getId());
                     movieRepository.save(movieModel);
-                    return ResponseEntity.noContent().build();
-                }).orElseGet( () -> ResponseEntity.notFound().build() );
+                    return movieModel;
+                }).orElseGet( () -> null );
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -40,6 +41,10 @@ public class MovieController {
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable(value = "id") UUID id,
                                              @RequestBody @Validated MovieModel movieModel){
-        return movieService.update(id, movieModel);
+        if(Objects.isNull(movieModel)){
+            return ResponseEntity.badRequest().build();
+        }
+        movieService.update(id, movieModel);
+        return ResponseEntity.noContent().build();
     }
 }
