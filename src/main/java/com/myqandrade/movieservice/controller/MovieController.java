@@ -4,6 +4,7 @@ import com.myqandrade.movieservice.models.MovieModel;
 import com.myqandrade.movieservice.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<MovieModel> save(@RequestBody MovieModel movie){
+    public ResponseEntity<MovieModel> save(@RequestBody @Validated MovieModel movie){
        return movieService.save(movie);
     }
 
@@ -37,8 +38,8 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MovieModel> update(@PathVariable(value = "id") UUID id,
-                                             @RequestBody MovieModel movieModel){
+    public ResponseEntity update(@PathVariable(value = "id") UUID id,
+                                             @RequestBody @Validated MovieModel movieModel){
         return movieService.update(id, movieModel);
     }
 }
