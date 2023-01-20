@@ -5,6 +5,7 @@ import com.myqandrade.movieservice.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,17 +40,24 @@ public class MovieController {
 
     @GetMapping("findById/{id}")
     public ResponseEntity<MovieModel> findById(@PathVariable(value = "id") UUID id){
-        return movieService.findById(id);
+        if(Objects.isNull(movieService.findById(id))){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(movieService.findById(id));
     }
 
     @PostMapping("/save")
-    public ResponseEntity<MovieModel> save(@RequestBody @Validated MovieModel movie){
-       return movieService.save(movie);
+    public ResponseEntity<?> save(@RequestBody @Validated MovieModel movie){
+       if(Objects.isNull(movieService.save(movie))){
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Movie already exists");
+       }
+       return ResponseEntity.ok(movieService.save(movie));
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<MovieModel> delete(@PathVariable(value = "id") UUID id){
-        return movieService.delete(id);
+    public ResponseEntity<?> delete(@PathVariable(value = "id") UUID id){
+        movieService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("update/{id}")
