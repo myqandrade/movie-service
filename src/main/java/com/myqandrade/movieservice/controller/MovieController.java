@@ -51,7 +51,7 @@ public class MovieController {
        if(Objects.isNull(movieService.save(movie))){
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Movie already exists");
        }
-       return ResponseEntity.ok(movieService.save(movie));
+       return ResponseEntity.status(HttpStatus.CREATED).body(movieService.save(movie));
     }
 
     @DeleteMapping("delete/{id}")
