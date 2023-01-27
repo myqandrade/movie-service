@@ -1,5 +1,6 @@
 package com.myqandrade.movieservice.controller;
 
+import com.myqandrade.movieservice.exception.MovieAlreadyExistsException;
 import com.myqandrade.movieservice.exception.MovieNotFoundException;
 import com.myqandrade.movieservice.models.dto.ErrorDTO;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +20,17 @@ public class ControllerAdvice {
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setStatus(NOT_FOUND.value());
         errorDTO.setMessage("Movie not found");
+        errorDTO.setTimestamp(new Date());
+
+        return errorDTO;
+    }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(MovieAlreadyExistsException.class)
+    public ErrorDTO handleMovieAlreadyExists(MovieAlreadyExistsException movieAlreadyExistsException){
+        ErrorDTO errorDTO = new ErrorDTO();
+        errorDTO.setStatus(BAD_REQUEST.value());
+        errorDTO.setMessage("Movie already registered");
         errorDTO.setTimestamp(new Date());
 
         return errorDTO;

@@ -1,5 +1,6 @@
 package com.myqandrade.movieservice.controller;
 
+import com.myqandrade.movieservice.exception.MovieAlreadyExistsException;
 import com.myqandrade.movieservice.exception.MovieNotFoundException;
 import com.myqandrade.movieservice.models.MovieModel;
 import com.myqandrade.movieservice.service.MovieService;
@@ -56,7 +57,7 @@ public class MovieController {
     @ResponseStatus(CREATED)
     public ResponseEntity<?> save(@RequestBody @Validated MovieModel movie){
        if(Objects.isNull(movieService.save(movie))){
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Movie already exists");
+           throw new MovieAlreadyExistsException();
        }
        return ResponseEntity.status(HttpStatus.CREATED).body(movieService.save(movie));
     }
@@ -73,7 +74,7 @@ public class MovieController {
     public ResponseEntity update(@PathVariable(value = "id") UUID id,
                                              @RequestBody @Validated MovieModel movieModel){
         if(Objects.isNull(movieModel)){
-            return ResponseEntity.badRequest().build();
+            throw new MovieNotFoundException();
         }
         return ResponseEntity.ok(movieService.update(id, movieModel));
     }
