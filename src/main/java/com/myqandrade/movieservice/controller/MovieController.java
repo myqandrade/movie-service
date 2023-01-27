@@ -1,5 +1,6 @@
 package com.myqandrade.movieservice.controller;
 
+import com.myqandrade.movieservice.exception.MovieNotFoundException;
 import com.myqandrade.movieservice.models.MovieModel;
 import com.myqandrade.movieservice.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static org.springframework.http.HttpStatus.*;
+
 @RestController
 @RequestMapping("/api/movie")
 public class MovieController {
@@ -22,11 +25,13 @@ public class MovieController {
     private MovieService movieService;
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<MovieModel>> findALl(){
+    @ResponseStatus(OK)
+    public ResponseEntity findALl(){
         return ResponseEntity.ok(movieService.findAll());
     }
 
     @GetMapping("/find")
+    @ResponseStatus(OK)
     public ResponseEntity find(MovieModel movieModel){
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
@@ -39,14 +44,16 @@ public class MovieController {
     }
 
     @GetMapping("findById/{id}")
-    public ResponseEntity<MovieModel> findById(@PathVariable(value = "id") UUID id){
+    @ResponseStatus(OK)
+    public ResponseEntity findById(@PathVariable(value = "id") UUID id){
         if(Objects.isNull(movieService.findById(id))){
-            return ResponseEntity.notFound().build();
+            throw new MovieNotFoundException();
         }
         return ResponseEntity.ok(movieService.findById(id));
     }
 
     @PostMapping("/save")
+    @ResponseStatus(CREATED)
     public ResponseEntity<?> save(@RequestBody @Validated MovieModel movie){
        if(Objects.isNull(movieService.save(movie))){
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Movie already exists");
@@ -55,12 +62,14 @@ public class MovieController {
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable(value = "id") UUID id){
+    @ResponseStatus(NO_CONTENT)
+    public ResponseEntity delete(@PathVariable(value = "id") UUID id){
         movieService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("update/{id}")
+    @ResponseStatus(NO_CONTENT)
     public ResponseEntity update(@PathVariable(value = "id") UUID id,
                                              @RequestBody @Validated MovieModel movieModel){
         if(Objects.isNull(movieModel)){
