@@ -1,5 +1,6 @@
 package com.myqandrade.movieservice.models;
 
+import com.myqandrade.movieservice.models.dto.MovieDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,5 +31,15 @@ public class MovieModel implements Serializable {
     private String genre;
     @Column(nullable = false, length = 4)
     private Integer year;
+
+    public static MovieModel convert(MovieDTO movieDTO){
+        MovieModel movieModel = new MovieModel();
+        movieModel.setTitle(movieDTO.getTitle());
+        movieModel.setDirector(movieDTO.getDirector());
+        movieModel.setGenre(movieDTO.getGenre());
+        movieModel.setYear(movieDTO.getYear());
+
+        return movieModel;
+    }
 
 }

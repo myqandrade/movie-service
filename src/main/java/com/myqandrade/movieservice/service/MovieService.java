@@ -1,15 +1,19 @@
 package com.myqandrade.movieservice.service;
 
+import com.myqandrade.movieservice.exception.MovieAlreadyExistsException;
 import com.myqandrade.movieservice.exception.MovieNotFoundException;
 import com.myqandrade.movieservice.models.MovieModel;
+import com.myqandrade.movieservice.models.dto.MovieDTO;
 import com.myqandrade.movieservice.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
@@ -17,35 +21,59 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
-    public List<MovieModel> findAll(){
+    public List<MovieDTO> findAll(){
         List<MovieModel> movies = movieRepository.findAll();
+        List<MovieDTO> moviesDTO =  movies.stream().map(MovieDTO::convert).collect(Collectors.toList());
         if(movies.isEmpty()){
             return null;
         }
-        return movies;
+        return moviesDTO;
     }
 
-    public List<MovieModel> find(Example example){
+    public List<MovieDTO> find(MovieDTO movieDTO){
+
+        MovieModel movie = MovieModel.convert(movieDTO);
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example example = Example.of(movie, matcher);
+
         List<MovieModel> movies = movieRepository.findAll(example);
+
         if(movies.isEmpty()){
             throw new MovieNotFoundException();
         }
-        return movies;
+
+        List<MovieDTO> moviesDTO = movies
+                .stream()
+                .map(MovieDTO::convert)
+                .collect(Collectors.toList());
+
+        return moviesDTO;
     }
 
-    public MovieModel findById(UUID id){
+    public MovieDTO findById(UUID id){
         Optional<MovieModel> movie = movieRepository.findById(id);
-        return movie.orElse(null);
+
+        if(movie.isEmpty()){
+            throw new MovieNotFoundException();
+        }
+
+        MovieDTO movieDTO = MovieDTO.convert(movie.get());
+        return movieDTO;
     }
 
-    public MovieModel save(MovieModel movie){
+    public MovieDTO save(MovieDTO movieDTO){
         List<MovieModel> movies = movieRepository.findAll();
         for(MovieModel x : movies){
-            if(movie.getTitle().equals(x.getTitle()) && movie.getDirector().equals(x.getDirector())){
-                return null;
+            if(movieDTO.getTitle().equals(x.getTitle()) && movieDTO.getDirector().equals(x.getDirector())){
+                throw new MovieAlreadyExistsException();
             }
         }
-        return movieRepository.save(movie);
+        MovieModel movie = MovieModel.convert(movieDTO);
+
+        return MovieDTO.convert(movieRepository.save(movie));
     }
 
     public void delete(UUID id){
@@ -53,13 +81,16 @@ public class MovieService {
         movieRepository.delete(movie.get());
     }
 
-    public MovieModel update(UUID id, MovieModel movieModel){
+    public MovieDTO update(UUID id, MovieDTO movieDTO){
         return movieRepository
                 .findById(id)
                 .map( movie -> {
-                    movieModel.setId(movie.getId());
-                    movieRepository.save(movieModel);
-                    return movieModel;
-                }).orElseGet( () -> null );
+                    movie.setTitle(movieDTO.getTitle());
+                    movie.setDirector(movieDTO.getDirector());
+                    movie.setGenre(movieDTO.getGenre());
+                    movie.setYear(movieDTO.getYear());
+                    movieRepository.save(movie);
+                    return MovieDTO.convert(movie);
+                }).orElseThrow(()-> new MovieNotFoundException());
     }
 }
