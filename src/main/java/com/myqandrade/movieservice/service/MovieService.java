@@ -1,5 +1,6 @@
 package com.myqandrade.movieservice.service;
 
+import com.myqandrade.movieservice.exception.MovieNotFoundException;
 import com.myqandrade.movieservice.models.MovieModel;
 import com.myqandrade.movieservice.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class MovieService {
     public List<MovieModel> find(Example example){
         List<MovieModel> movies = movieRepository.findAll(example);
         if(movies.isEmpty()){
-            return null;
+            throw new MovieNotFoundException();
         }
         return movies;
     }
