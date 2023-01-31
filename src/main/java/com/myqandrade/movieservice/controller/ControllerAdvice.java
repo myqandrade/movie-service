@@ -16,7 +16,7 @@ public class ControllerAdvice {
 
     @ResponseStatus(NOT_FOUND)
     @ExceptionHandler(MovieNotFoundException.class)
-    public ErrorDTO handleMovieNotFound(MovieNotFoundException movieNotFoundException){
+    public ErrorDTO handleMovieNotFound(){
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setStatus(NOT_FOUND.value());
         errorDTO.setMessage("Movie not found");
@@ -27,7 +27,7 @@ public class ControllerAdvice {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MovieAlreadyExistsException.class)
-    public ErrorDTO handleMovieAlreadyExists(MovieAlreadyExistsException movieAlreadyExistsException){
+    public ErrorDTO handleMovieAlreadyExists(){
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setStatus(BAD_REQUEST.value());
         errorDTO.setMessage("Movie already registered");

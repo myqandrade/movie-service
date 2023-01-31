@@ -80,6 +80,9 @@ public class MovieServiceImpl implements MovieService {
 
     public void delete(UUID id){
         Optional<MovieModel> movie = movieRepository.findById(id);
+        if(movie.isEmpty()){
+            throw new MovieNotFoundException();
+        }
         movieRepository.delete(movie.get());
     }
 
