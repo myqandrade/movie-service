@@ -4,6 +4,7 @@ import com.myqandrade.movieservice.exception.MovieAlreadyExistsException;
 import com.myqandrade.movieservice.exception.MovieNotFoundException;
 import com.myqandrade.movieservice.models.MovieModel;
 import com.myqandrade.movieservice.models.dto.MovieDTO;
+import com.myqandrade.movieservice.models.dto.NewTitleDTO;
 import com.myqandrade.movieservice.repositories.MovieRepository;
 import com.myqandrade.movieservice.service.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -97,5 +98,16 @@ public class MovieServiceImpl implements MovieService {
                     movieRepository.save(movie);
                     return MovieDTO.convert(movie);
                 }).orElseThrow(()-> new MovieNotFoundException());
+    }
+
+    @Override
+    public void newTitle(UUID id, NewTitleDTO newTitleDTO) {
+        movieRepository
+                .findById(id)
+                .map(movieModel -> {
+                    movieModel.setTitle(newTitleDTO.getNewTitle());
+                    movieRepository.save(movieModel);
+                    return movieModel;
+                }).orElseThrow(() -> new MovieNotFoundException());
     }
 }

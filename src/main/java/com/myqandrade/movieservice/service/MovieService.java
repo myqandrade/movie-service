@@ -1,6 +1,7 @@
 package com.myqandrade.movieservice.service;
 
 import com.myqandrade.movieservice.models.dto.MovieDTO;
+import com.myqandrade.movieservice.models.dto.NewTitleDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,5 +17,6 @@ public interface MovieService {
 
     public void delete(UUID id);
     public MovieDTO update(UUID id, MovieDTO movieDTO);
+    public void newTitle(UUID id, NewTitleDTO newTitleDTO);
 
 }

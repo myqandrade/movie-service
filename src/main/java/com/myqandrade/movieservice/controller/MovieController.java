@@ -1,6 +1,7 @@
 package com.myqandrade.movieservice.controller;
 
 import com.myqandrade.movieservice.models.dto.MovieDTO;
+import com.myqandrade.movieservice.models.dto.NewTitleDTO;
 import com.myqandrade.movieservice.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,5 +58,11 @@ public class MovieController {
     public ResponseEntity update(@PathVariable(value = "id") UUID id,
                                              @RequestBody @Validated MovieDTO movieDTO){
         return ResponseEntity.ok(movieService.update(id, movieDTO));
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(NO_CONTENT)
+    public void updateTitle(@PathVariable UUID id, @RequestBody NewTitleDTO newTitleDTO){
+        movieService.newTitle(id, newTitleDTO);
     }
 }
