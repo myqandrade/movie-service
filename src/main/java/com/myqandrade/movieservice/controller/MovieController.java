@@ -3,6 +3,7 @@ package com.myqandrade.movieservice.controller;
 import com.myqandrade.movieservice.models.dto.MovieDTO;
 import com.myqandrade.movieservice.models.dto.NewTitleDTO;
 import com.myqandrade.movieservice.service.MovieService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class MovieController {
 
     @PostMapping("/save")
     @ResponseStatus(CREATED)
-    public ResponseEntity<?> save(@RequestBody @Validated MovieDTO movieDTO){
+    public ResponseEntity<?> save(@RequestBody @Valid MovieDTO movieDTO){
        return ResponseEntity.status(HttpStatus.CREATED).body(movieService.save(movieDTO));
     }
 

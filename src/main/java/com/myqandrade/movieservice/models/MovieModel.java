@@ -2,6 +2,7 @@ package com.myqandrade.movieservice.models;
 
 import com.myqandrade.movieservice.models.dto.MovieDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,12 +25,16 @@ public class MovieModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @Column(nullable = false)
+    @NotEmpty(message = "Enter a valid title.")
     private String title;
     @Column(nullable = false)
+    @NotEmpty(message = "Enter a valid director.")
     private String director;
     @Column(nullable = false)
+    @NotEmpty(message = "Enter a valid genre.")
     private String genre;
     @Column(nullable = false, length = 4)
+    @NotEmpty(message = "Enter a valid year.")
     private Integer year;
 
     public static MovieModel convert(MovieDTO movieDTO){
