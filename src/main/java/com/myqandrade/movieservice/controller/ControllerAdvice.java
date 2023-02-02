@@ -4,6 +4,7 @@ import com.myqandrade.movieservice.exception.MovieAlreadyExistsException;
 import com.myqandrade.movieservice.exception.MovieNotFoundException;
 import com.myqandrade.movieservice.models.dto.ErrorDTO;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.UnexpectedTypeException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

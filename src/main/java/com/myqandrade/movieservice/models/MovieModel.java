@@ -2,6 +2,7 @@ package com.myqandrade.movieservice.models;
 
 import com.myqandrade.movieservice.models.dto.MovieDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,7 +35,7 @@ public class MovieModel implements Serializable {
     @NotEmpty(message = "Enter a valid genre.")
     private String genre;
     @Column(nullable = false, length = 4)
-    @NotEmpty(message = "Enter a valid year.")
+    @DecimalMin(value = "1900", message = "Enter a valid year")
     private Integer year;
 
     public static MovieModel convert(MovieDTO movieDTO){
