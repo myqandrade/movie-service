@@ -28,20 +28,20 @@ public class MovieModel implements Serializable {
     @Column(nullable = false)
     @NotEmpty(message = "Enter a valid title.")
     private String title;
-    @Column(nullable = false)
-    @NotEmpty(message = "Enter a valid director.")
-    private String director;
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_director")
+    private DirectorModel director;
     @Column(nullable = false)
     @NotEmpty(message = "Enter a valid genre.")
     private String genre;
     @Column(nullable = false, length = 4)
-    @DecimalMin(value = "1900", message = "Enter a valid year")
+    @DecimalMin(value = "1900", message = "Enter a valid year.")
     private Integer year;
 
     public static MovieModel convert(MovieDTO movieDTO){
         MovieModel movieModel = new MovieModel();
         movieModel.setTitle(movieDTO.getTitle());
-        movieModel.setDirector(movieDTO.getDirector());
+        movieModel.setDirector(DirectorModel.convert(movieDTO.getDirector()));
         movieModel.setGenre(movieDTO.getGenre());
         movieModel.setYear(movieDTO.getYear());
 

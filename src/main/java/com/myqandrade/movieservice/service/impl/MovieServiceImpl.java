@@ -2,6 +2,7 @@ package com.myqandrade.movieservice.service.impl;
 
 import com.myqandrade.movieservice.exception.MovieAlreadyExistsException;
 import com.myqandrade.movieservice.exception.MovieNotFoundException;
+import com.myqandrade.movieservice.models.DirectorModel;
 import com.myqandrade.movieservice.models.MovieModel;
 import com.myqandrade.movieservice.models.dto.MovieDTO;
 import com.myqandrade.movieservice.models.dto.NewTitleDTO;
@@ -92,7 +93,7 @@ public class MovieServiceImpl implements MovieService {
                 .findById(id)
                 .map( movie -> {
                     movie.setTitle(movieDTO.getTitle());
-                    movie.setDirector(movieDTO.getDirector());
+                    movie.setDirector(DirectorModel.convert(movieDTO.getDirector()));
                     movie.setGenre(movieDTO.getGenre());
                     movie.setYear(movieDTO.getYear());
                     movieRepository.save(movie);

@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 public class MovieDTO {
 
     private String title;
-    private String director;
+    private DirectorDTO director;
     private String genre;
     private Integer year;
 
     public static MovieDTO convert(MovieModel movieModel){
         MovieDTO movieDTO = new MovieDTO();
         movieDTO.setTitle(movieModel.getTitle());
-        movieDTO.setDirector(movieModel.getDirector());
+        movieDTO.setDirector(DirectorDTO.convert(movieModel.getDirector()));
         movieDTO.setGenre(movieModel.getGenre());
         movieDTO.setYear(movieModel.getYear());
 
