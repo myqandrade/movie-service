@@ -26,8 +26,7 @@ public class DirectorDTO {
         return director;
     }
 
-    public Set<MovieDTO> setMovies(Set<MovieDTO> movies){
+    public void setMovies(Set<MovieDTO> movies){
         this.movies = movies;
-        return movies;
     }
 }

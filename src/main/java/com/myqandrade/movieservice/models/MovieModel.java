@@ -1,5 +1,6 @@
 package com.myqandrade.movieservice.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.myqandrade.movieservice.models.dto.MovieDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
