@@ -5,8 +5,10 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -14,6 +16,7 @@ import java.util.UUID;
 @Data
 public class UserModel implements UserDetails, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -23,10 +26,15 @@ public class UserModel implements UserDetails, Serializable {
     private String username;
     @Column(nullable = false)
     private String password;
+    @ManyToMany
+    @JoinTable(name = "tb_users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<RoleModel> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.roles;
     }
 
     @Override
